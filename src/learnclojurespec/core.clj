@@ -43,4 +43,5 @@
   (println (s/explain ::fish-number 5))
   (println (s/explain ::first-line [1 2 "Red" "Black"]))
   (println (s/explain ::first-line1 [1 0 "Red" "Dun"]))
-)
+  (println (s/exercise ::first-line)))
+
