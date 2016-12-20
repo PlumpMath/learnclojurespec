@@ -21,11 +21,13 @@
 ;; Then, we can use s/def to register the spec we are going to define for global reuse. We'll use a namespaced keyword ::fish-number to express that our specification for a valid number is the keys of the fish-numbers map
 
 (s/def ::fish-number (set (keys fish-numbers)))
-(s/def ::color #{"Red" "Blue" "Dun"}) 
+(s/def ::color #{"Red" "Blue" "Dun"})
 
 ;; Specifying the sequences of the values 
 
 (s/def ::first-line (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color))
+
+(s/def ::abc-input (s/cat :n1 ::fish-number :c1 ::color))
 
 ;; Specifying the second number should be one bigger than the first number.
 (defn one-bigger? [{:keys [n1 n2]}]
@@ -33,6 +35,11 @@
 
 (s/def ::first-line1 (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color ) one-bigger? #(not= (:c1 %) (:c2 %))))
 
+(defn abc
+  [num color]
+  (if (s/valid? ::abc-input [num color]) {:n num :c color} (s/explain ::abc-input [num color]))
+  {:n num
+   :c color})
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -43,5 +50,7 @@
   (println (s/explain ::fish-number 5))
   (println (s/explain ::first-line [1 2 "Red" "Black"]))
   (println (s/explain ::first-line1 [1 0 "Red" "Dun"]))
-  (println (s/exercise ::first-line)))
+  (println (s/exercise ::first-line))
+  (println (abc 1 5)))
 
+(-main)
